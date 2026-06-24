@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ثيرد ستيب لتجارة الأسماك — مأكولات بحرية فاخرة في الإمارات توصيل في أبوظبي." />
+  <title>Third Step Fish Trading · Premium UAE Seafood</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     TOP NAVIGATION
+══════════════════════════════════════════════════════ -->
+<header>
+  <nav class="top-nav">
+    <div class="nav-logo" onclick="showPage('shop')">
+      <div class="emblem" aria-hidden="true">
+        <img src="img/logo.png" alt="Third Step Fish Trading" style="width:48px;height:48px;object-fit:contain" />
+      </div>
+      <div>
+        <div class="brand-name">Third Step</div>
+        <div class="brand-sub">Fish Trading · UAE</div>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <div class="nl active" data-page="shop"  onclick="showPage('shop')">Shop</div>
+      <div class="nl" data-page="catch"         onclick="showPage('catch')">Catch of the day</div>
+      <div class="nl" data-page="how"           onclick="showPage('how')">How it works</div>
+      <div class="nl" data-page="about"         onclick="showPage('about')">Our story</div>
+    </div>
+
+    <div class="nav-right">
+      <div class="search-wrap">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="search-input" placeholder="Search fish, Arabic name…" autocomplete="off" />
+        </div>
+        <div class="search-results-drop" id="search-drop"></div>
+      </div>
+      <div class="lang-btn">عربي</div>
+      <button class="cart-btn" id="cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-btn-text">Cart</span>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ── Mobile full-screen menu ── -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mm-head">
+    <div class="mm-brand">
+      <img src="img/logo.png" alt="" style="width:32px;height:32px;object-fit:contain;margin-right:8px" />
+      <div>
+        <div class="mm-brand-name">Third Step</div>
+        <div class="mm-brand-sub">Fish Trading · UAE</div>
+      </div>
+    </div>
+    <button class="mm-close" id="mm-close" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mm-nav">
+    <div class="mm-link active" data-page="shop"  onclick="showPage('shop');closeMM()">Shop</div>
+    <div class="mm-link" data-page="catch"        onclick="showPage('catch');closeMM()">Catch of the day</div>
+    <div class="mm-link" data-page="how"          onclick="showPage('how');closeMM()">How it works</div>
+    <div class="mm-link" data-page="about"        onclick="showPage('about');closeMM()">Our story</div>
+  </nav>
+  <div class="mm-cats">
+    <div class="mm-cats-title">Browse by category</div>
+    <div class="mm-cat-item" data-cat="all"      onclick="setSbCat(this);showPage('shop');closeMM()"><span>🐟</span> All seafood</div>
+    <div class="mm-cat-item" data-cat="large"    onclick="setSbCat(this);showPage('shop');closeMM()"><span>🐠</span> Large fish</div>
+    <div class="mm-cat-item" data-cat="small"    onclick="setSbCat(this);showPage('shop');closeMM()"><span>🐡</span> Small fish</div>
+    <div class="mm-cat-item" data-cat="shellfish"onclick="setSbCat(this);showPage('shop');closeMM()"><span>🦀</span> Shellfish & crabs</div>
+    <div class="mm-cat-item" data-cat="shrimp"   onclick="setSbCat(this);showPage('shop');closeMM()"><span>🦐</span> Shrimp & prawns</div>
+    <div class="mm-cat-item" data-cat="preorder" onclick="setSbCat(this);showPage('shop');closeMM()"><span>⏱</span> Pre-orders</div>
+  </div>
+  <div class="mm-footer">
+    <div class="mm-del-card">
+      <div class="mm-del-label">Next delivery</div>
+      <div class="mm-del-date">Wed 26 Jun · 8am – 1pm</div>
+      <div class="mm-del-note">Order by 6pm Tuesday</div>
+    </div>
+    <button class="mm-wa-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+      +971 50 000 0000
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MAIN LAYOUT
+══════════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ── SIDEBAR (desktop only) ── -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="sb-lbl">Categories</div>
+      <div class="sb-item active" data-cat="all" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        All seafood <span class="sb-cnt" id="sb-cnt-all">0</span>
+      </div>
+      <div class="sb-item" data-cat="large" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        Large fish <span class="sb-cnt" id="sb-cnt-large">0</span>
+      </div>
+      <div class="sb-item" data-cat="small" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        Small fish <span class="sb-cnt" id="sb-cnt-small">0</span>
+      </div>
+      <div class="sb-item" data-cat="shellfish" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        Shellfish &amp; crabs <span class="sb-cnt" id="sb-cnt-shellfish">0</span>
+      </div>
+      <div class="sb-item" data-cat="shrimp" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        Shrimp &amp; prawns <span class="sb-cnt" id="sb-cnt-shrimp">0</span>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div>
+      <div class="sb-lbl">Extras</div>
+      <div class="sb-item" onclick="">
+        <svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5h12.8"/></svg>
+        Sayadieh rice
+      </div>
+      <div class="sb-item" onclick="">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        Ice &amp; packaging
+      </div>
+      <div class="sb-item" data-cat="preorder" onclick="setSbCat(this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Pre-orders <span class="sb-cnt" id="sb-cnt-preorder" style="background:var(--gold-light);color:var(--gold-dark)">0</span>
+      </div>
+    </div>
+
+    <div class="delivery-card">
+      <div class="dc-eyebrow">Next delivery</div>
+      <div class="dc-date">Wed 26 Jun · 8am – 1pm</div>
+      <div class="dc-note">Order by 6pm Tuesday</div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main-content">
+
+    <!-- ════════════════════ SHOP PAGE ════════════════════ -->
+    <div id="page-shop">
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-left">
+          <div class="hero-eyebrow">Fresh catch — just landed today</div>
+          <h1>Premium UAE Seafood<br><em>Cleaned Your Way</em></h1>
+          <p class="hero-sub">سمك طازج مباشرة من البحر · Select your cut, add custom instructions, and place your order directly via WhatsApp.</p>
+          <div class="hero-actions">
+            <button class="btn-gold" onclick="document.getElementById('product-grid').scrollIntoView({behavior:'smooth'})">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              Shop today's catch
+            </button>
+            <button class="btn-ghost" onclick="showPage('how')">How it works</button>
+          </div>
+        </div>
+        <div class="hero-cards" id="hero-cards"></div>
+      </section>
+
+      <!-- Mobile category chips -->
+      <div class="cat-chips-bar" id="cat-chips-bar">
+        <div class="cat-chip active" data-cat="all"       onclick="setChip(this)">All</div>
+        <div class="cat-chip" data-cat="large"            onclick="setChip(this)">Large fish</div>
+        <div class="cat-chip" data-cat="small"            onclick="setChip(this)">Small fish</div>
+        <div class="cat-chip" data-cat="shellfish"        onclick="setChip(this)">Shellfish</div>
+        <div class="cat-chip" data-cat="shrimp"           onclick="setChip(this)">Shrimp</div>
+        <div class="cat-chip cat-chip-pre" data-cat="preorder" onclick="setChip(this)">Pre-orders</div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar" id="toolbar">
+        <div class="t-pill active" data-sort="default"    onclick="setSort(this)">Popular</div>
+        <div class="t-pill" data-sort="price-asc"         onclick="setSort(this)">Price: low–high</div>
+        <div class="t-pill" data-sort="price-desc"        onclick="setSort(this)">Price: high–low</div>
+        <div class="t-pill" data-sort="name"              onclick="setSort(this)">Name A–Z</div>
+        <div class="t-sep"></div>
+        <div class="t-pill t-pre" data-cat="preorder"     onclick="setSbCat(document.querySelector('[data-cat=preorder].sb-item'))">Pre-orders</div>
+        <div class="t-right">
+          <span id="item-count">Loading…</span>
+        </div>
+      </div>
+
+      <!-- Section header -->
+      <div class="sec-hdr">
+        <div class="sec-hdr-left">
+          <div class="sec-line"></div>
+          <h2 class="sec-title">Today's fresh catch</h2>
+        </div>
+        <span class="sec-link">Live from the boat · Abu Dhabi waters</span>
+      </div>
+
+      <!-- Product grid -->
+      <div class="product-grid" id="product-grid"></div>
+
+    </div><!-- /page-shop -->
+
+    <!-- ════════════════════ CATCH OF THE DAY ════════════════════ -->
+    <div id="page-catch" class="hidden">
+      <section class="page-hero catch-hero">
+        <div class="page-eyebrow">Daily fresh selection</div>
+        <h1 class="page-h1">Today's <em>Catch</em></h1>
+        <p class="page-sub">Handpicked by our fishermen at 4am every morning — the best of what the sea gave us today.</p>
+      </section>
+
+      <div class="catch-wrap">
+        <!-- Today's highlights -->
+        <div class="catch-highlight-row" id="catch-highlights">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Availability timeline -->
+        <div class="catch-section">
+          <div class="catch-sec-hdr">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Today's availability</h2>
+          </div>
+          <div class="avail-grid" id="avail-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Freshness promise -->
+        <div class="promise-strip">
+          <div class="promise-item">
+            <div class="promise-icon">🌊</div>
+            <div class="promise-title">Caught this morning</div>
+            <div class="promise-desc">All fish listed today were caught before 5am in UAE waters.</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-icon">🧊</div>
+            <div class="promise-title">Chilled immediately</div>
+            <div class="promise-desc">Flash-chilled on the boat and transported in ice-packed crates.</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-icon">🔪</div>
+            <div class="promise-title">Cut to order</div>
+            <div class="promise-desc">Cleaned and cut only after you place your order — never pre-packaged.</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-icon">📲</div>
+            <div class="promise-title">WhatsApp updates</div>
+            <div class="promise-desc">Get a photo of your fish before it's cut, plus real-time delivery updates.</div>
+          </div>
+        </div>
+
+        <!-- Pre-orders -->
+        <div class="catch-section">
+          <div class="catch-sec-hdr">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Pre-order for next catch</h2>
+            <span class="sec-link" style="margin-left:auto">Boats return in 48–72 hrs</span>
+          </div>
+          <p class="catch-pre-intro">These fish are currently out at sea. Reserve yours now and we'll notify you via WhatsApp when they land.</p>
+          <div class="product-grid" id="preorder-grid" style="padding:0 0 0 0"></div>
+        </div>
+      </div>
+    </div><!-- /page-catch -->
+
+    <!-- ════════════════════ HOW IT WORKS ════════════════════ -->
+    <div id="page-how" class="hidden">
+      <section class="page-hero how-hero">
+        <div class="page-eyebrow">Simple &amp; transparent</div>
+        <h1 class="page-h1">How it <em>Works</em></h1>
+        <p class="page-sub">From ocean to your doorstep — here's exactly what happens after you click "Add to cart".</p>
+      </section>
+
+      <div class="how-wrap">
+        <!-- Steps -->
+        <div class="how-steps-big">
+          <div class="hsb-item">
+            <div class="hsb-num">01</div>
+            <div class="hsb-body">
+              <h3>Browse &amp; choose your fish</h3>
+              <p>Browse today's catch — each listing shows the fish name in English and Arabic, the day's price, and availability (in stock or pre-order). Click any card to open the full detail view.</p>
+            </div>
+          </div>
+          <div class="hsb-connector"></div>
+          <div class="hsb-item">
+            <div class="hsb-num">02</div>
+            <div class="hsb-body">
+              <h3>Select your cut &amp; add notes</h3>
+              <p>Choose from 6 cut formats — whole, cleaned, fillet, steaks, curry cut, or custom. Add any special instructions: thickness, split head for soup, skin-on or skin-off, anything you need.</p>
+              <div class="hsb-cuts">
+                <span class="cut-chip">Whole uncut</span>
+                <span class="cut-chip">Cleaned &amp; gutted</span>
+                <span class="cut-chip">Fillet skin-on</span>
+                <span class="cut-chip">Steaks</span>
+                <span class="cut-chip">Curry cut</span>
+                <span class="cut-chip cut-chip-gold">Custom</span>
+              </div>
+            </div>
+          </div>
+          <div class="hsb-connector"></div>
+          <div class="hsb-item">
+            <div class="hsb-num">03</div>
+            <div class="hsb-body">
+              <h3>Add to cart &amp; choose delivery</h3>
+              <p>Add multiple fish to your cart, adjust quantities, and select add-ons like ice packs or insulated boxes. Then choose your preferred delivery window — morning or afternoon, up to 3 days ahead.</p>
+            </div>
+          </div>
+          <div class="hsb-connector"></div>
+          <div class="hsb-item">
+            <div class="hsb-num">04</div>
+            <div class="hsb-body">
+              <h3>Order via WhatsApp — it's instant</h3>
+              <p>Your full order — fish, cut, notes, delivery date, address — is automatically formatted into a WhatsApp message. One tap sends it directly to our team. No app download, no account needed.</p>
+              <div class="wa-preview-demo">
+                <div class="wapd-bubble">
+                  🐟 FreshCatch UAE — New Order<br>
+                  ──────────────<br>
+                  1. Hamour 2kg — Fillet skin-on<br>
+                  2. Shrimp 1kg — Cleaned<br>
+                  ──────────────<br>
+                  Delivery: Wed 26 Jun · 8am–1pm<br>
+                  Total: AED 111
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hsb-connector"></div>
+          <div class="hsb-item">
+            <div class="hsb-num">05</div>
+            <div class="hsb-body">
+              <h3>We clean, pack &amp; deliver</h3>
+              <p>Our team processes your order first thing in the morning. You'll receive a photo of your fish before cutting, then a delivery notification when we're on the way. Payment is cash on delivery.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cut guide -->
+        <div class="how-section">
+          <div class="how-sec-hdr">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Cut options explained</h2>
+          </div>
+          <div class="cuts-guide-grid">
+            <div class="cg-card">
+              <div class="cg-emoji">🐟</div>
+              <div class="cg-name">Whole uncut</div>
+              <div class="cg-desc">Fish delivered exactly as caught. No cleaning, no scaling. Ideal if you prefer to prepare it yourself or for display.</div>
+            </div>
+            <div class="cg-card">
+              <div class="cg-emoji">✂️</div>
+              <div class="cg-name">Cleaned &amp; gutted</div>
+              <div class="cg-desc">Gills and innards removed, fish scaled. Ready to cook whole on the grill or in a pan. Head and tail intact.</div>
+            </div>
+            <div class="cg-card">
+              <div class="cg-emoji">🍽️</div>
+              <div class="cg-name">Fillet skin-on</div>
+              <div class="cg-desc">Two boneless fillets with skin intact. Ideal for grilling, baking, or pan-frying. Crispy skin results guaranteed.</div>
+            </div>
+            <div class="cg-card">
+              <div class="cg-emoji">🔪</div>
+              <div class="cg-name">Steaks</div>
+              <div class="cg-desc">Cross-cut slices through the whole fish. Standard thickness ~2.5cm unless you specify otherwise in notes.</div>
+            </div>
+            <div class="cg-card">
+              <div class="cg-emoji">🍲</div>
+              <div class="cg-name">Curry cut</div>
+              <div class="cg-desc">Smaller, irregular pieces cut specifically for UAE-style fish curry. Bones in for maximum flavour in the gravy.</div>
+            </div>
+            <div class="cg-card cg-custom">
+              <div class="cg-emoji">💬</div>
+              <div class="cg-name">Custom</div>
+              <div class="cg-desc">Describe exactly what you need in the special instructions field. Our fishmonger will do his best to accommodate.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="how-section">
+          <div class="how-sec-hdr">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Frequently asked questions</h2>
+          </div>
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>What time do you deliver?</summary>
+              <p>We offer two delivery windows daily: 8am–1pm and 2pm–7pm, Saturday to Thursday. Select your preferred window during checkout. We'll send a WhatsApp message when we're 30 minutes away.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How do I pay?</summary>
+              <p>We accept cash on delivery only. Our driver will collect payment when your order is handed over. We're working on card and digital wallet payments — coming soon.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What areas do you deliver to?</summary>
+              <p>We currently deliver across Abu Dhabi city, Khalifa City, Al Reem Island, Yas Island, and Saadiyat Island. Delivery to Al Ain and Sharjah is available for orders above AED 200.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What if I'm not happy with my order?</summary>
+              <p>Your satisfaction is guaranteed. If the quality isn't what you expected, message us on WhatsApp within 2 hours of delivery and we'll arrange a replacement or full refund — no questions asked.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Can I order for bulk or corporate events?</summary>
+              <p>Absolutely. We cater for weddings, Majlis events, restaurants, and corporate gatherings. Message us directly on WhatsApp for bulk pricing and scheduling.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What is a pre-order?</summary>
+              <p>Some fish are seasonal or depend on daily catches. Pre-order items are reserved for the next boat return, typically 48–72 hours. You'll be notified on WhatsApp the moment your fish lands.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-how -->
+
+    <!-- ════════════════════ OUR STORY ════════════════════ -->
+    <div id="page-about" class="hidden">
+      <section class="page-hero about-hero">
+        <div class="page-eyebrow">Est. 2024 · Abu Dhabi</div>
+        <h1 class="page-h1">Our <em>Story</em></h1>
+        <p class="page-sub">We started FreshCatch to fix something that bothered us: why does buying fresh fish in Abu Dhabi feel like a gamble?</p>
+      </section>
+
+      <div class="about-wrap">
+        <div class="about-story">
+          <div class="story-text">
+            <h3>From fishermen to families</h3>
+            <p>FreshCatch was founded in 2024 by a team of Abu Dhabi locals who grew up buying fish from the Mina Zayed market — and watching it become harder and harder to find genuinely fresh, locally caught seafood at a fair price.</p>
+            <p>We partner directly with 14 fishing families across Abu Dhabi, eliminating every middleman between the ocean and your table. The fishermen set the price, and we handle everything from collection to delivery.</p>
+            <p>Our model is simple: orders placed before 6pm are processed the following morning, cleaned to your specification, and delivered in the same day. No frozen imports. No mystery fish. No guessing.</p>
+          </div>
+          <div class="story-stats">
+            <div class="stat-card">
+              <div class="stat-num">14</div>
+              <div class="stat-lbl">Fishing families</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">48h</div>
+              <div class="stat-lbl">Max fish age</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">0</div>
+              <div class="stat-lbl">Frozen imports</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">100%</div>
+              <div class="stat-lbl">UAE waters</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-values">
+          <div class="how-sec-hdr" style="padding-bottom:24px">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">What we believe in</h2>
+          </div>
+          <div class="values-grid">
+            <div class="value-card">
+              <div class="value-icon">🎣</div>
+              <h4>Fisherman-first pricing</h4>
+              <p>Our fishermen set their own prices. We take a flat 12% logistics fee and nothing more. Fair for them, fresh for you.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">🌊</div>
+              <h4>UAE waters only</h4>
+              <p>Every fish on our platform was caught in UAE territorial waters. No imports, no exceptions. We show you which boat caught it.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">🔪</div>
+              <h4>Cut to your kitchen</h4>
+              <p>UAE families cook differently. We know the difference between a curry cut and a grill cut, and we get it right every time.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-icon">📲</div>
+              <h4>WhatsApp-native</h4>
+              <p>No app to download. No account to create. Just WhatsApp — the tool every UAE family already uses every day.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-team">
+          <div class="how-sec-hdr" style="padding-bottom:24px">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Meet the team</h2>
+          </div>
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="team-avatar">👨‍🍳</div>
+              <div class="team-name">Ahmed Al Mansoori</div>
+              <div class="team-role">Co-founder · Operations</div>
+              <p class="team-bio">Third-generation Abu Dhabi fisherman's son. Manages relationships with our fishing families and morning collection routes.</p>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar">👩‍💼</div>
+              <div class="team-name">Fatima Al Zaabi</div>
+              <div class="team-role">Co-founder · Product</div>
+              <p class="team-bio">Former food-tech product manager. Built the order flow and WhatsApp system after years of frustration with fish shopping in the city.</p>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar">🧑‍🔧</div>
+              <div class="team-name">Khalid Al Hameli</div>
+              <div class="team-role">Head Fishmonger</div>
+              <p class="team-bio">20 years at the Mina Zayed market. Handles all cutting and preparation. His curry cut is, objectively, perfect.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-contact">
+          <div class="how-sec-hdr" style="padding-bottom:24px">
+            <div class="sec-line"></div>
+            <h2 class="sec-title">Get in touch</h2>
+          </div>
+          <div class="contact-row">
+            <div class="contact-card">
+              <div class="contact-icon">📲</div>
+              <div class="contact-label">WhatsApp orders &amp; support</div>
+              <div class="contact-val">+971 50 000 0000</div>
+              <div class="contact-note">Saturday–Thursday · 6am – 8pm</div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-icon">📍</div>
+              <div class="contact-label">Based in</div>
+              <div class="contact-val">Abu Dhabi, UAE</div>
+              <div class="contact-note">Delivering across Abu Dhabi &amp; Al Ain</div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-icon">📧</div>
+              <div class="contact-label">Email</div>
+              <div class="contact-val">hello@thirdstep.ae</div>
+              <div class="contact-note">We respond within 24 hours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-about -->
+
+  </div><!-- /main-content -->
+</div><!-- /layout -->
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-col">
+    <div class="footer-logo">Third Step <span>Fish Trading</span></div>
+    <div class="footer-sub">Abu Dhabi · Direct from the boat · Est. 2024</div>
+    <div class="footer-copy">© 2024 Third Step Fish Trading. All rights reserved.</div>
+  </div>
+  <div class="footer-col footer-nav-col">
+    <div class="footer-col-title">Navigate</div>
+    <div class="footer-links">
+      <a onclick="showPage('shop')">Shop</a>
+      <a onclick="showPage('catch')">Catch of the day</a>
+      <a onclick="showPage('how')">How it works</a>
+      <a onclick="showPage('about')">Our story</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Categories</div>
+    <div class="footer-links">
+      <a onclick="setSbCat(document.querySelector('[data-cat=large].sb-item'));showPage('shop')">Large fish</a>
+      <a onclick="setSbCat(document.querySelector('[data-cat=small].sb-item'));showPage('shop')">Small fish</a>
+      <a onclick="setSbCat(document.querySelector('[data-cat=shellfish].sb-item'));showPage('shop')">Shellfish</a>
+      <a onclick="setSbCat(document.querySelector('[data-cat=shrimp].sb-item'));showPage('shop')">Shrimp &amp; prawns</a>
+    </div>
+  </div>
+  <div class="footer-col footer-contact-col">
+    <div class="footer-col-title">Contact</div>
+    <div class="footer-wa-block">
+      <button class="footer-wa" onclick="window.open('https://wa.me/971500000000','_blank')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+        +971 50 000 0000
+      </button>
+      <div class="footer-hours">Sat–Thu · 6am – 8pm</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     PRODUCT DETAIL MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="pdp-overlay" onclick="closePDP()">
+  <div class="pdp-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="Product details">
+    <button class="modal-close" onclick="closePDP()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="pdp-vis" id="pdp-vis">
+      <div class="pdp-emoji" id="pdp-emoji"></div>
+      <div class="pdp-vis-name" id="pdp-vis-name"></div>
+      <div class="pdp-vis-ar"   id="pdp-vis-ar"></div>
+    </div>
+    <div class="pdp-body">
+      <div class="pdp-price-row">
+        <span class="pdp-price" id="pdp-price"></span>
+        <span class="pdp-unit"  id="pdp-unit"></span>
+      </div>
+      <p class="pdp-meta" id="pdp-meta"></p>
+      <div class="pdp-weight-info" id="pdp-weight-info"></div>
+      <div class="pdp-stock-row" id="pdp-stock"></div>
+      <div class="pre-notice hidden" id="pdp-pre-notice">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div>Currently <strong>out of stock</strong> — fishing boats return in 48–72 hours. Pre-order now to reserve your cut for the next catch.</div>
+      </div>
+      <div id="pdp-cuts" role="radiogroup" aria-label="Select cut format"></div>
+      <div class="field-label">Special instructions <span style="text-transform:none;letter-spacing:0;font-weight:300">(optional)</span></div>
+      <textarea class="notes-area" id="pdp-notes" placeholder='e.g. "Keep head for soup · thick steaks 2 inches · skin-off fillet"'></textarea>
+      <div id="pdp-addons"></div>
+      <button class="pdp-cta" id="pdp-cta">Add to cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CART DRAWER
+══════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="cart-overlay" onclick="closeCart()">
+  <div class="cart-drawer" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="Shopping cart">
+    <div class="drawer-head">
+      <h2 class="drawer-title">Your cart</h2>
+      <button class="drawer-close" onclick="closeCart()" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="cart-body"></div>
+    <div class="drawer-foot" id="cart-foot"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHECKOUT MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="co-overlay" onclick="closeCheckout()">
+  <div class="checkout-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="Checkout">
+    <div class="co-left">
+      <div class="co-eyebrow">Order summary</div>
+      <h3>Your selections</h3>
+      <div id="co-items"></div>
+      <div class="co-grand">
+        <span class="co-grand-lbl">Total</span>
+        <span class="co-grand-val" id="co-grand">AED 0</span>
+      </div>
+    </div>
+    <div class="co-right">
+      <div class="co-head">
+        <h2>Delivery details</h2>
+        <button class="modal-close" style="position:static;width:34px;height:34px" onclick="closeCheckout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="pre-alert hidden" id="co-pre-alert">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>Cart includes a <strong>pre-order item</strong>. Earliest delivery is 48–72 hrs — greyed dates below are unavailable.</div>
+      </div>
+
+      <div class="co-sec-lbl">Your details</div>
+      <div class="del-type-row">
+        <label class="del-type-opt">
+          <input type="radio" name="del-type" value="delivery" checked onchange="window._updatePreview&&window._updatePreview()" />
+          <span class="del-type-inner">🚚 <strong>Home Delivery</strong><small>AED 15 · Same day</small></span>
+        </label>
+        <label class="del-type-opt">
+          <input type="radio" name="del-type" value="pickup" onchange="window._updatePreview&&window._updatePreview()" />
+          <span class="del-type-inner">🏪 <strong>Shop Pickup</strong><small>Free · Ready in 1 hr</small></span>
+        </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Full name *</label><input type="text" id="co-name" placeholder="Ahmed Al Mansoori" autocomplete="name" /></div>
+        <div class="form-group"><label>Mobile (WhatsApp) *</label><input type="tel" id="co-mobile" placeholder="+971 50 000 0000" autocomplete="tel" /></div>
+      </div>
+      <div class="form-group" id="address-group">
+        <label>Delivery address *</label>
+        <input type="text" id="co-address" placeholder="Villa 12, Al Bateen, Abu Dhabi" autocomplete="street-address" />
+        <div class="loc-row">
+          <button class="loc-btn" id="loc-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Detect my location
+          </button>
+          <a class="loc-maps-link" id="loc-maps-link" href="https://maps.google.com" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Pin on Google Maps
+          </a>
+        </div>
+        <div class="loc-preview hidden" id="loc-preview">
+          <div class="loc-map-frame" id="loc-map-frame"></div>
+          <div class="loc-map-meta">
+            <div class="loc-map-addr" id="loc-map-addr"></div>
+            <div class="loc-map-coords" id="loc-map-coords"></div>
+            <a class="loc-open-maps" id="loc-open-maps" href="#" target="_blank" rel="noopener">
+              Open in Google Maps ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group"><label>Notes for driver</label><input type="text" id="co-driver-note" placeholder="Ring bell twice, leave at gate…" /></div>
+
+      <div class="co-sec-lbl">Payment method *</div>
+      <div class="del-type-row pay-method-row">
+        <label class="del-type-opt">
+          <input type="radio" name="pay-method" value="cod" checked onchange="window._updatePreview&&window._updatePreview()" />
+          <span class="del-type-inner pay-inner">
+            <span class="pay-icon">💵</span>
+            <span>
+              <strong>Cash on Delivery</strong>
+              <small>Pay when order arrives</small>
+            </span>
+          </span>
+        </label>
+        <label class="del-type-opt">
+          <input type="radio" name="pay-method" value="bank" onchange="window._updatePreview&&window._updatePreview()" />
+          <span class="del-type-inner pay-inner">
+            <span class="pay-icon">🏦</span>
+            <span>
+              <strong>Bank Transfer</strong>
+              <small>Details sent after order</small>
+            </span>
+          </span>
+        </label>
+      </div>
+      <div class="bank-details-note hidden" id="bank-details-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Our team will share bank transfer details on WhatsApp after confirming your order.
+      </div>
+
+      <div class="co-sec-lbl">Delivery window *</div>
+      <div class="date-grid">
+        <div class="date-opt disabled"><div class="d-day">Today</div><div class="d-num">24</div><div class="d-slot">Unavailable</div></div>
+        <div class="date-opt disabled"><div class="d-day">Tue</div><div class="d-num">25</div><div class="d-slot">Unavailable</div></div>
+        <div class="date-opt selected" onclick="selDate(this)"><div class="d-day">Wed</div><div class="d-num">26</div><div class="d-slot">8am – 1pm</div></div>
+        <div class="date-opt" onclick="selDate(this)"><div class="d-day">Thu</div><div class="d-num">27</div><div class="d-slot">8am – 1pm</div></div>
+        <div class="date-opt" onclick="selDate(this)"><div class="d-day">Thu</div><div class="d-num">27</div><div class="d-slot">2pm – 7pm</div></div>
+        <div class="date-opt" onclick="selDate(this)"><div class="d-day">Fri</div><div class="d-num">28</div><div class="d-slot">8am – 1pm</div></div>
+      </div>
+
+      <div class="co-sec-lbl">WhatsApp message preview</div>
+      <div class="msg-preview" id="msg-preview"></div>
+      <button class="wa-final" id="wa-final">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/></svg>
+        Place order via WhatsApp
+      </button>
+      <p class="co-disclaimer">By placing your order you agree to the selected payment method. Cancellations accepted via WhatsApp up to 2 hours before delivery.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast-container" aria-live="assertive"></div>
+
+<script type="module" src="js/app.js"></script>
+<script>
+/* ── Non-module global helpers ── */
+function showPage(page) {
+  const pages = ['shop','catch','how','about'];
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if (el) el.classList.toggle('hidden', p !== page);
+  });
+  document.querySelectorAll('.nl').forEach(n =>
+    n.classList.toggle('active', n.dataset.page === page)
+  );
+  document.querySelectorAll('.mm-link').forEach(n =>
+    n.classList.toggle('active', n.dataset.page === page)
+  );
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  /* populate catch page grids when visited */
+  if (page === 'catch' && window._populateCatch) window._populateCatch();
+}
+
+function selDate(el) {
+  if (el.classList.contains('disabled')) return;
+  document.querySelectorAll('.date-opt:not(.disabled)').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window._updatePreview) window._updatePreview();
+}
+
+function openMM() {
+  const mm = document.getElementById('mobile-menu');
+  const hb = document.getElementById('hamburger');
+  mm.classList.add('open');
+  mm.setAttribute('aria-hidden','false');
+  hb.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMM() {
+  const mm = document.getElementById('mobile-menu');
+  const hb = document.getElementById('hamburger');
+  mm.classList.remove('open');
+  mm.setAttribute('aria-hidden','true');
+  hb.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('hamburger').addEventListener('click', openMM);
+document.getElementById('mm-close').addEventListener('click', closeMM);
+</script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Third Step Fish Trading · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-emblem"><img src="../img/logo.png" alt="" style="width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1)" /></div>
+      <div>
+        <div class="login-brand">Third Step</div>
+        <div class="login-sub">Fish Trading · Admin</div>
+      </div>
+    </div>
+    <div class="demo-notice" id="demo-notice" style="display:none">
+      <strong>Demo mode</strong> — Firebase not configured. Using local demo data. To enable full backend, add your Firebase credentials to <code>js/admin.js</code>.
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="admin@freshcatch.ae" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <div class="login-error hidden" id="login-error"></div>
+    <button class="login-btn" id="login-btn">Sign in</button>
+    <button class="demo-btn" id="demo-btn">Continue in demo mode</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     APP SHELL
+══════════════════════════════ -->
+<div class="app hidden" id="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <img src="../img/logo.png" alt="Third Step" style="width:36px;height:36px;object-fit:contain;filter:brightness(0) invert(1)" />
+      <div>
+        <div class="sb-brand">Third Step</div>
+        <div class="sb-sub">Fish Trading</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-link active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="sb-link" data-page="products">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        Products
+        <span class="sb-badge" id="sb-prod-count">0</span>
+      </div>
+      <div class="sb-link" data-page="orders">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Orders
+        <span class="sb-badge sb-badge-red" id="sb-order-count">0</span>
+      </div>
+      <div class="sb-link" data-page="catch-upload">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Catch Upload
+      </div>
+      <div class="sb-link" data-page="categories">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+        Categories
+        <span class="sb-badge" id="sb-cat-count">0</span>
+      </div>
+      <div class="sb-link" data-page="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user" id="sb-user">—</div>
+      <button class="sb-dir-toggle" id="admin-lang-toggle" onclick="toggleDir()">🌐 عربي</button>
+      <button class="sb-logout" id="logout-btn">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-hdr">
+        <h1>Dashboard</h1>
+        <div class="page-hdr-sub" id="dash-date"></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon teal">🐟</div>
+          <div>
+            <div class="stat-val" id="stat-products">0</div>
+            <div class="stat-lbl">Total products</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">📦</div>
+          <div>
+            <div class="stat-val" id="stat-orders">0</div>
+            <div class="stat-lbl">Total orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🔔</div>
+          <div>
+            <div class="stat-val" id="stat-pending">0</div>
+            <div class="stat-lbl">Pending orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">💰</div>
+          <div>
+            <div class="stat-val" id="stat-revenue">AED 0</div>
+            <div class="stat-lbl">Total revenue</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-hdr">
+        <h2>Recent orders</h2>
+        <button class="btn-ghost-sm" onclick="showPage('orders')">View all →</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="dash-orders-table">
+          <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="dash-orders-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PRODUCTS ── -->
+    <div class="page hidden" id="page-products">
+      <div class="page-hdr">
+        <h1>Products</h1>
+        <button class="btn-primary" id="add-product-btn">+ Add product</button>
+      </div>
+      <div class="table-toolbar">
+        <input class="search-input" id="prod-search" placeholder="Search products…" />
+        <select class="filter-select" id="prod-cat-filter">
+          <option value="">All categories</option>
+          <option value="large">Large fish</option>
+          <option value="small">Small fish</option>
+          <option value="shellfish">Shellfish</option>
+          <option value="shrimp">Shrimp</option>
+        </select>
+        <select class="filter-select" id="prod-stock-filter">
+          <option value="">All stock</option>
+          <option value="inStock">In stock</option>
+          <option value="preOrder">Pre-order</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="products-table">
+          <thead>
+            <tr>
+              <th>Fish</th>
+              <th>Arabic</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Unit</th>
+              <th>Badge</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ORDERS ── -->
+    <div class="page hidden" id="page-orders">
+      <div class="page-hdr">
+        <h1>Orders</h1>
+        <div class="hdr-actions">
+          <select class="filter-select" id="order-status-filter">
+            <option value="">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="preparing">Preparing</option>
+            <option value="out_for_delivery">Out for delivery</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Mobile</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Delivery</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="orders-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── CATCH UPLOAD ── -->
+    <div class="page hidden" id="page-catch-upload">
+      <div class="page-hdr">
+        <h1>Catch Upload</h1>
+        <div class="page-hdr-sub">Push today's fresh catch live in under 60 seconds</div>
+      </div>
+      <div class="catch-upload-grid">
+        <div class="catch-upload-form settings-card">
+          <h3>🐟 New Catch Entry</h3>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Fish name (English) *</label>
+              <input type="text" id="cu-name" placeholder="e.g. Fresh Hamour" />
+            </div>
+            <div class="form-group">
+              <label>Arabic name</label>
+              <input type="text" id="cu-name-ar" placeholder="هامور" dir="rtl" />
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Gross weight (kg) *</label>
+              <input type="number" id="cu-gross-weight" placeholder="1.0" step="0.1" min="0.1" />
+            </div>
+            <div class="form-group">
+              <label>Net yield %</label>
+              <input type="text" id="cu-net-yield" placeholder="70–75%" />
+            </div>
+            <div class="form-group">
+              <label>Stock qty (kg)</label>
+              <input type="number" id="cu-stock-qty" placeholder="10" min="0" />
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Price (AED) *</label>
+              <input type="number" id="cu-price" placeholder="48" min="0" step="0.5" />
+            </div>
+            <div class="form-group">
+              <label>Unit</label>
+              <select id="cu-unit">
+                <option value="per kg">per kg</option>
+                <option value="per 500g">per 500g</option>
+                <option value="per piece">per piece</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="cu-category">
+              <option value="large">Large fish</option>
+              <option value="small">Small fish</option>
+              <option value="shellfish">Shellfish</option>
+              <option value="shrimp">Shrimp</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Availability</label>
+            <div class="avail-toggle-row">
+              <label class="avail-toggle-opt">
+                <input type="radio" name="cu-avail" value="live" checked />
+                <span class="avail-toggle-inner avail-live">🟢 Live Now</span>
+              </label>
+              <label class="avail-toggle-opt">
+                <input type="radio" name="cu-avail" value="preorder" />
+                <span class="avail-toggle-inner avail-pre">⏱ Pre-Order</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Catch note (optional)</label>
+            <textarea id="cu-note" rows="2" placeholder="e.g. Caught this morning off Khor Fakkan — very fresh, limited quantity"></textarea>
+          </div>
+          <button class="btn-primary" style="width:100%;padding:14px;font-size:14px" id="cu-push-btn">
+            🚀 Push Live to Website
+          </button>
+          <p class="catch-timer" id="cu-timer"></p>
+        </div>
+        <div class="catch-recent-panel">
+          <h3 style="font-size:15px;font-weight:600;margin-bottom:16px;color:var(--ink)">Recently pushed</h3>
+          <div id="catch-recent-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CATEGORIES ── -->
+    <div class="page hidden" id="page-categories">
+      <div class="page-hdr">
+        <h1>Categories</h1>
+        <button class="btn-primary" id="add-category-btn">+ Add category</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Slug (used in code)</th>
+              <th>Color</th>
+              <th>Products</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="categories-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div class="page hidden" id="page-settings">
+      <div class="page-hdr">
+        <h1>Settings</h1>
+        <button class="btn-primary" id="save-settings-btn">Save all changes</button>
+      </div>
+      <div class="settings-grid">
+
+        <div class="settings-card">
+          <h3>Business contact</h3>
+          <div class="form-group">
+            <label>WhatsApp number (no +)</label>
+            <input type="text" id="s-wa-number" placeholder="971500000000" />
+          </div>
+          <div class="form-group">
+            <label>Business email</label>
+            <input type="email" id="s-email" placeholder="hello@freshcatch.ae" />
+          </div>
+          <div class="form-group">
+            <label>Business hours</label>
+            <input type="text" id="s-hours" placeholder="Sat–Thu · 6am – 8pm" />
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3>Delivery</h3>
+          <div class="form-group">
+            <label>Delivery fee (AED)</label>
+            <input type="number" id="s-delivery-fee" placeholder="15" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Cutoff time for next-day delivery</label>
+            <input type="time" id="s-cutoff" value="18:00" />
+          </div>
+          <div class="form-group">
+            <label>Free delivery above (AED, 0 = disabled)</label>
+            <input type="number" id="s-free-delivery" placeholder="200" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Delivery areas</label>
+            <textarea id="s-areas" rows="3" placeholder="Abu Dhabi city, Khalifa City, Al Reem Island…"></textarea>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3>Delivery windows</h3>
+          <p class="settings-note">Manage the time slots customers can choose from in checkout.</p>
+          <div id="delivery-windows-list"></div>
+          <button class="btn-ghost-sm mt-8" id="add-window-btn">+ Add window</button>
+        </div>
+
+        <div class="settings-card">
+          <h3>Hero announcement</h3>
+          <div class="form-group">
+            <label>Eyebrow text</label>
+            <input type="text" id="s-eyebrow" placeholder="Fresh catch — just landed today" />
+          </div>
+          <div class="form-group">
+            <label>Hero headline</label>
+            <input type="text" id="s-headline" placeholder="Premium UAE Seafood" />
+          </div>
+          <div class="form-group">
+            <label>Hero subline (English)</label>
+            <textarea id="s-subline" rows="2" placeholder="Select your cut, add custom instructions…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Next delivery display</label>
+            <input type="text" id="s-next-delivery" placeholder="Wed 26 Jun · 8am – 1pm" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══════════════════════════════
+     PRODUCT MODAL
+══════════════════════════════ -->
+<div class="modal-overlay hidden" id="product-modal">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h2 id="product-modal-title">Add product</h2>
+      <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Fish name (English) *</label>
+          <input type="text" id="p-name" placeholder="Hamour" />
+        </div>
+        <div class="form-group">
+          <label>Fish name (Arabic) *</label>
+          <input type="text" id="p-name-ar" placeholder="هامور" dir="rtl" />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Subtitle / Species</label>
+          <input type="text" id="p-subtitle" placeholder="Grouper" />
+        </div>
+        <div class="form-group">
+          <label>Emoji</label>
+          <input type="text" id="p-emoji" placeholder="🐠" maxlength="4" />
+        </div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>Price (AED) *</label>
+          <input type="number" id="p-price" placeholder="48" min="0" step="0.5" />
+        </div>
+        <div class="form-group">
+          <label>Unit</label>
+          <select id="p-unit">
+            <option value="per kg">per kg</option>
+            <option value="per 500g">per 500g</option>
+            <option value="per piece">per piece</option>
+            <option value="per 250g">per 250g</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="p-category">
+            <option value="large">Large fish</option>
+            <option value="small">Small fish</option>
+            <option value="shellfish">Shellfish</option>
+            <option value="shrimp">Shrimp</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Badge</label>
+          <select id="p-badge">
+            <option value="">None</option>
+            <option value="best">Best seller</option>
+            <option value="new">In stock / New</option>
+            <option value="pop">Popular</option>
+            <option value="low">Low stock</option>
+            <option value="preorder">Pre-order</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Availability</label>
+          <select id="p-availability">
+            <option value="inStock">In stock</option>
+            <option value="preOrder">Pre-order (out of stock)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeProductModal()">Cancel</button>
+      <button class="btn-primary" id="save-product-btn">Save product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     ORDER DETAIL MODAL
+══════════════════════════════ -->
+<div class="modal-overlay hidden" id="order-modal">
+  <div class="modal-box wide" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h2 id="order-modal-title">Order details</h2>
+      <button class="modal-close-btn" onclick="closeOrderModal()">✕</button>
+    </div>
+    <div class="modal-body" id="order-modal-body"></div>
+    <div class="weight-adjuster-bar" id="weight-adjuster-bar">
+      <div class="wa-bar-label">
+        <span>⚖️</span>
+        <div>
+          <strong>Actual scale weight</strong>
+          <small>Override if fish weighs differently than requested (final billing weight)</small>
+        </div>
+      </div>
+      <div class="wa-bar-inputs">
+        <input type="number" id="actual-weight-input" placeholder="e.g. 1.12" step="0.01" min="0" />
+        <span class="wa-bar-unit">kg</span>
+        <button class="btn-primary" id="save-weight-btn" onclick="saveActualWeight()">Save weight</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="printKitchenTicket()" id="kitchen-ticket-btn">🖨️ Kitchen Ticket</button>
+      <button class="btn-ghost" onclick="closeOrderModal()">Close</button>
+      <div class="order-status-row">
+        <label>Update status:</label>
+        <select id="order-status-select">
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="preparing">Preparing</option>
+          <option value="out_for_delivery">Out for delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <button class="btn-primary" id="update-order-status-btn">Update status</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category modal -->
+<div class="modal-overlay hidden" id="category-modal">
+  <div class="modal-box sm" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h2 id="category-modal-title">Add category</h2>
+      <button class="modal-close-btn" onclick="closeCategoryModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Display name *</label>
+        <input type="text" id="c-label" placeholder="e.g. Large Fish" />
+      </div>
+      <div class="form-group">
+        <label>Slug (lowercase, no spaces) *</label>
+        <input type="text" id="c-slug" placeholder="e.g. large" />
+        <div class="field-hint">Used internally — cannot change after products are assigned.</div>
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <div class="color-picker-row">
+          <label class="color-opt"><input type="radio" name="c-color" value="teal" checked /><span class="color-swatch" style="background:#eef7f4;border-color:#1a6b55;color:#1a6b55">Teal</span></label>
+          <label class="color-opt"><input type="radio" name="c-color" value="gold" /><span class="color-swatch" style="background:#fdf6ed;border-color:#c4986e;color:#8a5a28">Gold</span></label>
+          <label class="color-opt"><input type="radio" name="c-color" value="blue" /><span class="color-swatch" style="background:#e8f0ff;border-color:#4080e0;color:#3060c0">Blue</span></label>
+          <label class="color-opt"><input type="radio" name="c-color" value="purple" /><span class="color-swatch" style="background:#f0e8ff;border-color:#8040c0;color:#6030a0">Purple</span></label>
+          <label class="color-opt"><input type="radio" name="c-color" value="red" /><span class="color-swatch" style="background:#fff0f0;border-color:#d44;color:#d44">Red</span></label>
+          <label class="color-opt"><input type="radio" name="c-color" value="gray" /><span class="color-swatch" style="background:#f4f4f2;border-color:#bbb;color:#666">Gray</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeCategoryModal()">Cancel</button>
+      <button class="btn-primary" id="save-category-btn">Save category</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div class="modal-overlay hidden" id="confirm-modal">
+  <div class="modal-box sm" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h2>Confirm delete</h2>
+      <button class="modal-close-btn" onclick="closeConfirm()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-msg">Are you sure? This cannot be undone.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirm-ok-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Kitchen ticket print template (hidden, print-only) -->
+<div id="kitchen-ticket-print" style="display:none"></div>
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<script type="module" src="js/admin.js"></script>
+<script>
+function toggleDir() {
+  const html = document.documentElement;
+  const isRtl = html.getAttribute('dir') === 'rtl';
+  if (isRtl) {
+    html.setAttribute('dir', 'ltr');
+    html.setAttribute('lang', 'en');
+    localStorage.setItem('dir', 'ltr');
+    const btn = document.getElementById('admin-lang-toggle');
+    if (btn) btn.textContent = '🌐 عربي';
+  } else {
+    html.setAttribute('dir', 'rtl');
+    html.setAttribute('lang', 'ar');
+    localStorage.setItem('dir', 'rtl');
+    const btn = document.getElementById('admin-lang-toggle');
+    if (btn) btn.textContent = '🌐 EN';
+  }
+}
+(function() {
+  const saved = localStorage.getItem('dir');
+  if (saved === 'rtl') {
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', 'ar');
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('admin-lang-toggle');
+      if (btn) btn.textContent = '🌐 EN';
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Circle arc -->
+  <path d="M200 40 A160 160 0 1 1 40 200" stroke="#1a3a6b" stroke-width="18" stroke-linecap="round" fill="none"/>
+  <!-- Fish body -->
+  <path d="M80 185 C110 140 160 125 215 130 C255 133 290 148 310 170 C290 192 255 207 215 210 C160 215 110 200 80 185 Z" fill="#1a3a6b"/>
+  <!-- Fish tail -->
+  <path d="M80 185 L42 155 L52 185 L42 215 Z" fill="#1a3a6b"/>
+  <!-- Dorsal fin -->
+  <path d="M175 130 C185 105 210 98 225 108 L215 130 Z" fill="#1a3a6b"/>
+  <!-- Eye -->
+  <circle cx="285" cy="168" r="8" fill="white"/>
+  <circle cx="287" cy="168" r="4" fill="#1a3a6b"/>
+  <!-- Wave 1 -->
+  <path d="M95 222 C125 210 165 230 200 220 C235 210 270 225 310 218" stroke="#1a3a6b" stroke-width="13" stroke-linecap="round" fill="none"/>
+  <!-- Wave 2 -->
+  <path d="M115 248 C150 236 190 255 228 245 C262 235 292 250 325 244" stroke="#1a3a6b" stroke-width="10" stroke-linecap="round" fill="none"/>
+</svg>
