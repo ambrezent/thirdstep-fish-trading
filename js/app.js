@@ -14,7 +14,7 @@ const firebaseConfig = {
   appId:             "1:192728450319:web:f38432714e9fe691deea7a"
 };
 
-const WA_NUMBER = "971500000000"; // your WhatsApp business number (no +)
+const WA_NUMBER = "971562913116"; // Third Step Fish Trading — primary WhatsApp
 
 // ── Firebase init — safe fallback if config is still placeholder ──────────────
 let db = null, firebaseReady = false;
