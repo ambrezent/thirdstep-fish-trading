@@ -683,40 +683,49 @@ locBtn.addEventListener("click", async () => {
       // Update "Pin on Google Maps" link to the exact coords
       locMapsLink.href = mapsUrl;
 
-      // Show map embed via OpenStreetMap (no API key needed)
-      locMapFrame.innerHTML = `<iframe
-        src="https://www.openstreetmap.org/export/embed.html?bbox=${lng-.005},${lat-.005},${lng+.005},${lat+.005}&layer=mapnik&marker=${lat},${lng}"
-        loading="lazy" title="Delivery location map">
-      </iframe>`;
-
-      // Set coords display
-      locMapCoords.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-      locOpenMaps.href = mapsUrl;
+      // Show interactive Leaflet map with draggable marker
+      locMapFrame.innerHTML = `<div id="leaflet-map" style="width:100%;height:100%;border-radius:inherit"></div>`;
       locPreview.classList.remove("hidden");
 
-      // Reverse geocode via Nominatim (OpenStreetMap, no key needed)
-      try {
-        const res  = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
-          { headers: { "Accept-Language": "en" } }
-        );
-        const data = await res.json();
-        const addr = data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      await new Promise(r => setTimeout(r, 50)); // let DOM paint
+      const leafMap = L.map("leaflet-map").setView([lat, lng], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(leafMap);
 
-        // Fill address field
-        const addrInput = document.getElementById("co-address");
-        addrInput.value = addr;
-        locMapAddr.textContent = addr;
+      const marker = L.marker([lat, lng], { draggable: true }).addTo(leafMap);
+      marker.bindPopup("Drag to adjust your location").openPopup();
+
+      const applyCoords = async (newLat, newLng) => {
+        const newMapsUrl = `https://www.google.com/maps?q=${newLat},${newLng}`;
+        locMapCoords.textContent = `${newLat.toFixed(6)}, ${newLng.toFixed(6)}`;
+        locOpenMaps.href = newMapsUrl;
+        locMapsLink.href = newMapsUrl;
+        try {
+          const res  = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${newLat}&lon=${newLng}&format=json`,
+            { headers: { "Accept-Language": "en" } }
+          );
+          const data = await res.json();
+          const addr = data.display_name || `${newLat.toFixed(5)}, ${newLng.toFixed(5)}`;
+          document.getElementById("co-address").value = addr;
+          locMapAddr.textContent = addr;
+        } catch {
+          const fallback = `${newLat.toFixed(5)}, ${newLng.toFixed(5)}`;
+          document.getElementById("co-address").value = fallback;
+          locMapAddr.textContent = "Drag pin to refine location";
+        }
         updatePreview();
-        toast("Location detected and address filled", "success");
-      } catch {
-        // Fallback: just use coordinates
-        const fallback = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-        document.getElementById("co-address").value = fallback;
-        locMapAddr.textContent = "Location pinned (coordinates below)";
-        updatePreview();
-        toast("Location pinned — address may need editing", "success");
-      }
+      };
+
+      await applyCoords(lat, lng);
+
+      marker.on("dragend", async (e) => {
+        const { lat: newLat, lng: newLng } = e.target.getLatLng();
+        locMapAddr.textContent = "Updating address…";
+        await applyCoords(newLat, newLng);
+        toast("Location updated", "success");
+      });
 
       locBtn.classList.remove("loading");
       locBtn.innerHTML = `
@@ -724,6 +733,7 @@ locBtn.addEventListener("click", async () => {
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
         </svg>
         Location detected ✓`;
+      toast("Location detected — drag pin to adjust", "success");
     },
     (err) => {
       locBtn.classList.remove("loading");
