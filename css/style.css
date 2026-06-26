@@ -1248,16 +1248,16 @@ header { position: sticky; top: 0; z-index: 200; background: var(--white); borde
 .del-type-opt input { display: none; }
 .del-type-inner {
   display: flex; flex-direction: column; gap: 3px;
-  padding: 12px 14px; border: 1.5px solid rgba(255,255,255,.15);
+  padding: 12px 14px; border: 1.5px solid var(--border);
   border-radius: var(--r-lg); cursor: pointer; transition: all .2s;
-  background: rgba(255,255,255,.05);
+  background: var(--cream);
 }
-.del-type-inner strong { font-size: 13px; color: #fff; }
-.del-type-inner small  { font-size: 11px; color: rgba(255,255,255,.45); }
+.del-type-inner strong { font-size: 13px; color: var(--ink); }
+.del-type-inner small  { font-size: 11px; color: var(--muted); }
 .del-type-opt input:checked + .del-type-inner {
-  border-color: var(--teal); background: rgba(26,107,85,.2);
+  border-color: var(--teal); background: var(--teal-light);
 }
-.del-type-opt:hover .del-type-inner { border-color: rgba(255,255,255,.35); }
+.del-type-opt:hover .del-type-inner { border-color: var(--teal); }
 
 /* Payment method row — icon + text layout */
 .pay-inner { flex-direction: row; align-items: center; gap: 10px; }
