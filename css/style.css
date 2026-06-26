@@ -1263,6 +1263,8 @@ header { position: sticky; top: 0; z-index: 200; background: var(--white); borde
 .pay-inner { flex-direction: row; align-items: center; gap: 10px; }
 .pay-icon  { font-size: 22px; flex-shrink: 0; }
 .pay-inner span:last-child { display: flex; flex-direction: column; gap: 2px; }
+.pay-inner strong { color: var(--ink) !important; font-size: 13px; }
+.pay-inner small  { color: var(--muted) !important; font-size: 11px; }
 
 /* Bank details info box */
 .bank-details-note {
